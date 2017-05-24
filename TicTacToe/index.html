@@ -1,0 +1,41 @@
+<input type="button" value="Join Game" id="joinGame" />
+
+<table>
+  <tr>
+    <td id="0"><input type="button" value="" id="" /></td>
+    <td id="1"></td>
+    <td id="2"></td>
+  </tr>
+  <tr>
+    <td id="3"></td>
+    <td id="4"></td>
+    <td id="5"></td>
+  </tr>
+  <tr>
+    <td id="6"></td>
+    <td id="7"></td>
+    <td id="8"></td>
+  </tr>
+</table>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+	var socket = io.connect('http://localhost:8080');
+	
+	$('#joingame').click(function() {
+		var username = prompt('What shall I call you?');
+		socket.emit('join', username);
+	});
+
+	socket.on('gameStart', function(turn) {
+		
+	});
+	
+	socket.on('turnStart', function() {
+
+	});
+	
+	socket.on('gameEnd', function() {
+
+	});
+	
+</script>
