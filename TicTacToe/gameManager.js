@@ -1,76 +1,71 @@
 // This module is a dumb module that merely holds values pertaining to the game of tictactoe
-var player1 = '';
-var player2 = '';
-var board;
+var _player1 = '';
+var _player2 = '';
+var _board = ['','','','','','','','',''];
+var _turn = '';
+var _ready = false;
+
+var init = function() {
+this._player1 = '';
+this._player2 = '';
+this._board = ['','','','','','','','',''];
+this._turn = '';
+this._ready = false;
+}
+
 
 
 var registerPlayer = function(playerID) {
-	if(player1 == '') {
-		player1 = playerID;
-		return player1;
+	if(this._player1 == '') {
+		this._player1 = playerID;
 	}
-	else if(player2 == '') {
-		player2 = playerID;
-		return player2;
+	else if(this._player2 == '') {
+		this._player2 = playerID;
 	}
 	else {
-		return null;
+		return false;
 	}
+	if(this._player1 && this._player2) {
+		this._ready = true;
+		this._turn = this._player1;
+	}
+	return true;
 }
 
 
 var wipePlayers = function() {
-	player1 = '';
-	player2 = '';
+	_player1 = '';
+	_player2 = '';
 }
 
 var wipeBoard = function() {
 	for(i = 0;i++;i<9) {
-		board[i] = '';
+		this._board[i] = '';
 	}
 }
 
 var checkBoardStatus = function() {	
 }
 
-var placeMark = function(x, y, sign) {
-	board[ boardParser(x,y) ] = sign;
+var placeMark = function(selectedSquare, name) {
+	console.log('Player Name:' + name);
+	var sign = '';
+	if(name == _player1) {
+		sign = 'x';	
+	}
+	else {
+		sign = 'o';
+	}
+	this._board[selectedSquare] = sign;
+	console.log('Board: ' + this._board);
 }
 
-var boardParser = function(x, y) {
-	var returnValue;
-	if(x == 1) {
-		if(y == 1) {
-			returnValue = 0; 
-		}
-		else if(y == 2) {
-			returnValue = 1; 
-		}
-		else if(y == 3) {
-			returnValue = 2; 
-		}
-	}
-	else if(x == 2) {
-		if(y == 1) {
-			returnValue = 3; 
-		}
-		else if(y == 2) {
-			returnValue = 4; 
-		}
-		else if(y == 3) {
-			returnValue = 5; 
-		}
-	}
-	else if(x == 3) {
-		if(y == 1) {
-			returnValue = 6; 
-		}
-		else if(y == 2) {
-			returnValue = 7; 
-		}
-		else if(y == 3) {
-			returnValue = 8; 
-		}
-	}
-	return returnValue;
-}
+exports.getReady = function() { return this._ready; }
+exports.getBoard = function() { return this._board; }
+exports.getP1 = function() { return this._player1; } 
+exports.getP2 = function() { return this._player2; }
+exports.getTurn = function() { return this._turn; }
+exports.init = init;
+exports.registerPlayer = registerPlayer;
+exports.placeMark = placeMark;
+exports.checkBoardStatus = checkBoardStatus;
