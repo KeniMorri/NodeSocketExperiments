@@ -1,7 +1,35 @@
 	var socket = io.connect('192.168.1.80:8080');
+	var gameStatus = 'waiting';
+	
+	var layoutBoard = function(boardLayout) {
+		boardLayout.forEach(function(url, index) {
+			$('#b' + index).find('img').attr('src', url);
+		});	
+	};
 	$('#debug').click(function() {
 		console.log("Debug Clicked");
 		socket.emit('debug', "debug");
+	});
+	$('#joinGame').click(function() { 
+		var username = prompt('What Shall I call you?');
+		socket.emit('join game', username);
+	});
+	socket.on('sync', function(pack) {
+		console.log('Syncing Information');
+		$('#player1').html(pack.player1);
+		$('#player2').html(pack.player2);
+		$('#turn').html(pack.currentPlayersTurn);	
+		gameStatus = pack.gameStatus;
+		layoutBoard(pack.boardLayout);
+	});
+	socket.on('startTurn', function(boardLayout) {
+		layoutBoard(boardLayout);	
+		for(i=0;i<9;i++) {
+			$('#b' + i).click(function() {
+				$(this).unbind('click');
+				socket.emit('playersMove', $(this).attr('id')[1]);	
+			});
+		}
 	});
 	socket.on('debug', function(data) {
 		alert(data);
