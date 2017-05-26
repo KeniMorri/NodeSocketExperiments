@@ -1,43 +1,12 @@
-<div style='float: left'>
-<input type="button" value="Join Game" id="joinGame" />
-<input type="button" value="Debug" id="debug" />
-<table>
-	<tr>
-		<td>Player1:</td>
-		<td><p id="player1"> N/A </p> </td>
-	<tr>
-	<tr>
-		<td>Player2:</td>
-		<td><p id="player2"> N/A </p> </td>
-	<tr>
-	<tr>
-		<td>Whose turn is it?</td>
-		<td><p id="turn"> N/A </p> </td>
-	</tr>
-</table>
-<hr>
-</div>
-<div style='float: right'>
-<table bgcolor="#000000">
-  <tr>
-    <td id="b0"><img src="https://i.imgbox.com/GHjuRret.png"></td>
-    <td id="b1"><img src="https://i.imgbox.com/GHjuRret.png"></td>
-    <td id="b2"><img src="https://i.imgbox.com/GHjuRret.png"></td>
-  </tr>
-  <tr>
-    <td id="b3"><img src="https://i.imgbox.com/GHjuRret.png"></td>
-    <td id="b4"><img src="https://i.imgbox.com/GHjuRret.png"></td>
-    <td id="b5"><img src="https://i.imgbox.com/GHjuRret.png"></td>
-  </tr>
-  <tr>
-    <td id="b6"><img src="https://i.imgbox.com/GHjuRret.png"></td>
-    <td id="b7"><img src="https://i.imgbox.com/GHjuRret.png"></td>
-    <td id="b8"><img src="https://i.imgbox.com/GHjuRret.png"></td>
-  </tr>
-</table>
-</div>
-<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-<script src="/socket.io/socket.io.js"></script>
+	var socket = io.connect('192.168.1.80:8080');
+	$('#debug').click(function() {
+		console.log("Debug Clicked");
+		socket.emit('debug', "debug");
+	});
+	socket.on('debug', function(data) {
+		alert(data);
+	});
+/*
 <script>
 	var socket = io.connect('192.168.1.80:8080');
 	var name = '';
@@ -139,3 +108,4 @@
 		}
 	}
 </script>
+*/
