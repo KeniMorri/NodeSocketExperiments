@@ -23,12 +23,23 @@
 		layoutBoard(pack.boardLayout);
 	});
 	socket.on('startTurn', function(boardLayout) {
+		console.log('Starting Turn');
 		layoutBoard(boardLayout);	
 		for(i=0;i<9;i++) {
-			$('#b' + i).click(function() {
-				$(this).unbind('click');
-				socket.emit('playersMove', $(this).attr('id')[1]);	
-			});
+				$('#b' + i).unbind('click');
+		}
+		for(i=0;i<9;i++) {
+			if($('#b' + i).attr('marked') != false) {
+				$('#b' + i).click(function() {
+					socket.emit('playersMove', $(this).attr('id')[1]);	
+				});
+				
+			}
+		}
+	});
+	socket.on('moveAcknowledged', function() {
+		for(i=0;i<9;i++) {
+				$('#b' + i).unbind('click');
 		}
 	});
 	socket.on('debug', function(data) {
