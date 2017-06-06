@@ -1,0 +1,13 @@
+{
+    "name": "muriReader",
+    "version": "0.0.1",
+    "dependencies": {
+        "express" : "latest",
+        "ejs" : "latest",
+        "cookie-session": "latest",
+        "socket.io": "latest",
+				"cloudscraper": "latest"
+    },
+    "author": "Kenny Nguyen <kenimorri@gmail.com>",
+    "description": "Muri Web Reader prototype"
+}
