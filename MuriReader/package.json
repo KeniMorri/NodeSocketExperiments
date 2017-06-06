@@ -6,7 +6,8 @@
         "ejs" : "latest",
         "cookie-session": "latest",
         "socket.io": "latest",
-				"cloudscraper": "latest"
+        "cloudscraper": "latest",
+        "nightmare": "latest"
     },
     "author": "Kenny Nguyen <kenimorri@gmail.com>",
     "description": "Muri Web Reader prototype"
