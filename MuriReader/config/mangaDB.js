@@ -3,6 +3,10 @@ var Manga           = require('../app/models/manga');
 
 
 var newMangaEntry = function(newManga) {
+  console.log('Trying to insert ' + newManga.length + ' mangas');
+  Manga.insertMany(newManga, function(error, docs) {});
+
+  /*
   Manga.findOne({ 'mangaUrl' : newManga.mangaUrl}, function(err, manga) {
     if(err)
       return false;
@@ -11,9 +15,9 @@ var newMangaEntry = function(newManga) {
       return false;
     }
     else {
-      console.log('Trying to add new entry');
-      console.log(newManga.mangaUrl);
-      console.log(newManga.mangaName);
+      //console.log('Trying to add new entry');
+      //console.log(newManga.mangaUrl);
+      //console.log(newManga.mangaName);
       var newMangaEntry = new Manga();
       newMangaEntry.mangaUrl = newManga.mangaUrl;
       newMangaEntry.mangaName = newManga.mangaName;
@@ -25,6 +29,7 @@ var newMangaEntry = function(newManga) {
       })
     }
   })
+  */
 };
 
 exports.newMangaEntry = newMangaEntry;

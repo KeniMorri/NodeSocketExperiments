@@ -1,4 +1,5 @@
 var kissManga = require('./kissMangaV2.js');
+var batoto = require('./batoto.js');
 var mangaDB = require('../config/mangaDB.js');
 
 // app/routes.js
@@ -8,9 +9,14 @@ module.exports = function(app, passport) {
     // HOME PAGE (with login links) ========
     // =====================================
     app.get('/', function(req, res) {
+        res.render('index.ejs'); // load the index.ejs file
+    });
+    app.get('/test', function(req, res) {
         //kissManga.getChapters('http://kissmanga.com/Manga/Rough-Sketch-Senpai');
         //kissManga.getMangaChapterPages('http://kissmanga.com/Manga/Rough-Sketch-Senpai/Vol-001-Ch-001--Why-Does-It-Have-to-Be-Me-?id=344254');
-        kissManga.getMangaDatabase('', 245);
+        //kissManga.getMangaDatabase('http://kissmanga.com/MangaList?page=');
+        //batoto.getMangaDatabase('');
+        batoto.getChapters('http://bato.to/comic/_/comics/tsugumomo-r4271');
         /*
         var tmp = {
           mangaUrl : 'ahttp://kissmanga.com/Manga/Grand-Blue/Vol-002-Ch-008--Boycon?id=315193',
@@ -18,7 +24,12 @@ module.exports = function(app, passport) {
         };
         mangaDB.newMangaEntry(tmp);
         */
-        res.render('index.ejs'); // load the index.ejs file
+        res.render('test.ejs'); // load the index.ejs file
+    });
+
+
+    app.get('/ereader', function(req, res) {
+        res.render('ereader.ejs'); // load the index.ejs file
     });
 
     // =====================================

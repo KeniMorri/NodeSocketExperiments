@@ -15,7 +15,8 @@ var mangaSchema = mongoose.Schema({
   chapters      : [{
     chapterUrl  : String,
     chapterName : String,
-    date        : Date
+    date        : Date,
+    sort        : String
   }]
 });
 
