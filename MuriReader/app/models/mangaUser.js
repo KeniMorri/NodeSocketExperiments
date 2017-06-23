@@ -6,9 +6,7 @@ var mangaUserSchema = mongoose.Schema({
   userID          : String,
   mangas          : [{
     mangaUrl      : String,
-    chapters      : [{
-      chapterUrl  : String
-    }]
+    chapters      : [String]
   }]
 });
 

@@ -16,9 +16,19 @@
         <h1><span class="fa fa-lock"></span> Database Test</h1>
     </div>
     <input type="text" id="myInput" placeholder="Search for names..">
+    <table id="myResultTable" style="display:none">
+      <tr>
+        <th> Result Manga Name </th>
+        <th> Link to Singular Page </th>
+        <th> Manga Url </th>
+        <th> Author </th>
+        <th> Last Updated </th>
+      </tr>
+    </table>
     <table id="myTable">
       <tr>
         <th> Manga Name </th>
+        <th> Link to Singular Page </th>
         <th> Manga Url </th>
         <th> Author </th>
         <th> Last Updated </th>
@@ -26,7 +36,8 @@
         <% manga.forEach(function(item, index) { %>
           <tr>
             <td> <%= item.mangaName %> </td>
-            <td> <a href="<%= item.mangaUrl %>"> <%= item.mangaUrl %></a> </td>
+            <td> <a href="./manga/<%= item.mangaUrl %>"> <%= item.mangaUrl %> </a> </td>
+            <td> <a href="http://bato.to/comic/_/comics/<%= item.mangaUrl %>"> http://bato.to/comic/_/comics/<%= item.mangaUrl %></a> </td>
             <td> <%= item.author %> </td>
             <td> <%= item.lastUpdated %> </td>
           </tr>
