@@ -28,10 +28,10 @@
             <li><a href="/batoto/searchResults">Search Manga</a></li>
             <li><a href="./">Back to manga</a></li>
             <% if(data.previousPage) { %>
-            <li> <a href='./<%= data.previousPage.split('#')[1] %>'> Previous Chapter </a> </li>
+            <li> <a href='./<%= data.previousPage.split('#')[1] %>?mod=true'> Previous Chapter </a> </li>
             <% } %>
             <% if(data.nextPage) { %>
-            <li><a href='./<%= data.nextPage.split('#')[1] %>'> Next Chapter </a> </li>
+            <li><a href='./<%= data.nextPage.split('#')[1] %>?mod=true'> Next Chapter </a> </li>
             <% } %>
             <li> Manga Page Zoom % <br/> <input id='slider' type="range" value="100"> </li>
         </ul>
@@ -43,7 +43,7 @@
 <div class="container">
 
     <div class="jumbotron text-center">
-        <h1><span class="fa fa-lock"></span> <%= data.chapterName %> </h1>
+        <h1><span class="fa fa-lock"></span>MODDED <%= data.chapterName %> </h1>
     </div>
   </p>
 
@@ -64,7 +64,7 @@
 var page = 0;
 for(var i = 1; i < (data.pagesCount + 1); i++) {
 if(i < 10) { %>
-  <img  class='mangaPage center' style='width:100%' src='<%= tmp[0] %>img00000<%= i %>.png' onerror="imageFix(this)">
+  <img  class='mangaPage center' style='width:100%' src='<%= tmp[0] %>img00000<%= i %>.png' onerror="imageFix(this);">
   <%
 }
 else {

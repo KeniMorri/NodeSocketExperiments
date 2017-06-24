@@ -34,6 +34,7 @@ var newMangaEntry = function(newManga) {
 };
 
 var getManga = function(batotoEndingUrl) {
+  console.log('Comparing:' + batotoEndingUrl + ')');
   //var fullBatotoUrl = "http://bato.to/comic/_/" + batotoEndingUrl;
   return Q(Manga.findOne({'mangaUrl': batotoEndingUrl}).exec())
   .then(function(manga) {

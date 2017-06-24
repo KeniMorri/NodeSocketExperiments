@@ -3,6 +3,10 @@ var batoto = require('./batoto.js');
 var mangaDB = require('../config/mangaDB.js');
 var mangaUserDB = require('../config/mangaUserDB')
 
+var request = require('request')
+
+var Jimp = require("jimp");
+
 var Q = require('q');
 
 //batoto.login();
@@ -17,7 +21,10 @@ module.exports = function(app, passport) {
         res.render('index.ejs'); // load the index.ejs file
     });
     app.get('/batoto/manga/:mangaName', function(req,res) {
-      //console.log('User Accessed: ' + req.params.mangaName);
+      console.log('User Accessed: ' + req.params.mangaName);
+      req.params.mangaName = encodeURIComponent(req.params.mangaName);
+      req.params.mangaName = req.params.mangaName.toLowerCase();
+      console.log(encodeURIComponent(req.params.mangaName));
 
       if(req.query.fav == 'true') {
         console.log("Current UserID: " + req.user.google.id);
@@ -37,6 +44,7 @@ module.exports = function(app, passport) {
         })
       }
       else {
+        console.log('Looking for manga');
         mangaDB.getManga(req.params.mangaName)
         .then(function(manga) {
           if(manga === null) throw new Error('No manga was found');
@@ -44,7 +52,7 @@ module.exports = function(app, passport) {
         })
         .then(function(manga) {
           if(manga.genres.length > 0) {
-            //console.log('Sending this Manga to client: ' + manga);
+            console.log('Sending this Manga to client: ' + manga);
             res.render('mangaPage.ejs', {
               manga : manga,
               user : req.user
@@ -52,7 +60,7 @@ module.exports = function(app, passport) {
           }
           else {
             batoto.getMangaInfoAndChaptersLive('http://bato.to/comic/_/' + req.params.mangaName, function(manga) {
-              //console.log("Send this manga to client LIVE: " + manga);
+              console.log("Send this manga to client LIVE: " + manga);
               res.render('mangaPage.ejs', {
                 manga : manga,
                 user : req.user
@@ -71,12 +79,85 @@ module.exports = function(app, passport) {
       }
     });
 
+    var jimpRender = function(originalData, currentPageNum, newPages, cb) {
+      console.log('JIMP');
+      var currentPage = originalData.firstImage.split('img0000')[0];
+      currentPage = currentPage + 'img0000';
+      var zeroLen = 'img0000';
+      if(currentPageNum < 10) 
+        {
+          currentPage = currentPage + '0';
+          zeroLen = zeroLen + '0';
+        }
+      var filetype = originalData.firstImage.split('.')[3];
+      var r = request(currentPage + currentPageNum + '.' + filetype)
+      r.on('response', function(resp) {
+        console.log("RESPONSE FOR " + currentPage + currentPageNum + '.' + filetype);
+        console.log(resp.statusCode);
+        if(resp.statusCode == '404') filetype = 'png'; 
+      Jimp.read(currentPage + currentPageNum + '.' + filetype)
+        .then(function(img) {
+          img.autocrop(.002, false)
+            .write("public/" + originalData.chapterName + "/M" + zeroLen + currentPageNum + '.png');
+        })
+        .then(function() {
+          //var pageUrl = "http//minisharks.asuscomm.com:8095/public/M" + zeroLen + currentPageNum + '.' + filetype;
+          //newPages.push(pageUrl);
+          console.log("Successful, current newPages: " + newPages);
+          if(currentPageNum < originalData.pagesCount) {
+            jimpRender(originalData, ++currentPageNum, newPages, cb);
+          }
+          else {
+            originalData.firstImage = "http://minisharks.asuscomm.com:8095/public/" + originalData.chapterName + "/Mimg000001.png";
+            cb(originalData);
+            console.log("Done");
+          }
+        })
+        .catch(function (err) {
+          console.log("Fail: " + err);
+        })
+      })
+    }
+
     app.get('/batoto/manga/:mangaName/:chapterUrl', function(req,res) {
       console.log('User Accessed: ' + req.params.mangaName + ' ' + req.params.chapterUrl);
       batoto.getMangaChapterPages(req.params.chapterUrl, function(data) {
-        res.render('mangaChapterPage.ejs', {
-          data : data
-        })
+        if(req.query.mod == 'true') {
+          //console.log('mod activate');
+          //data.firstModImage = "http://minisharks.asuscomm.com:8095/public/" + data.chapterName + "/Mimg000001.png";
+          
+          var newPages = [];
+          var r = request("http://minisharks.asuscomm.com:8095/public/" + data.chapterName + "/Mimg000001.png")
+          r.on('response', function(resp) {
+            //console.log("RESPONSE FOR " + currentPage + currentPageNum + '.' + filetype);
+            //console.log(resp.statusCode);
+            if(resp.statusCode == '404') { 
+
+
+
+
+
+              jimpRender(data, 1, newPages, function(modData) {
+                console.log('Done');
+                console.log('tak' + data);
+                res.render('mangaChapterPageMod.ejs', {
+                data : modData 
+                });
+              })
+            }
+            else {
+              data.firstImage = "http://minisharks.asuscomm.com:8095/public/" + data.chapterName + "/Mimg000001.png";
+              res.render('mangaChapterPageMod', {
+                data: data
+              });
+            }
+          });
+        }
+        else {
+          res.render('mangaChapterPage.ejs', {
+            data : data
+          });
+        }
       });
       /*
       Q.fcall(batoto.getMangaChapterPages(req.params.chapterUrl))
